@@ -1,0 +1,345 @@
+/* ============================================================
+   نظام التصميم — "أرشيف الدولة"
+   الفكرة: كل حدث يظهر كأنه وثيقة رسمية/برقية مصنّفة تُفتح من ملف
+   أرشيفي، لا كبطاقة لعبة عصرية. الخلفية داكنة كغرفة أرشيف، والحبر
+   الذهبي الباهت يحاكي أختام وتوقيعات الوثائق الحكومية القديمة.
+   ============================================================ */
+
+:root {
+  --ink-black: #14161c;
+  --ink-panel: #1c1f27;
+  --paper-gold: #c9a876;
+  --paper-gold-dim: #8a7350;
+  --seal-red: #9a4a3f;
+  --field-green: #4f5d3f;
+  --text-primary: #e8e4da;
+  --text-muted: #9a9689;
+  --border-hairline: #34384280;
+
+  --font-display: 'Amiri', 'Georgia', serif;
+  --font-body: 'IBM Plex Sans Arabic', 'Tahoma', sans-serif;
+  --font-mono: 'IBM Plex Mono', monospace;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body,
+#root {
+  height: 100%;
+  margin: 0;
+}
+
+body {
+  background: var(--ink-black);
+  background-image:
+    radial-gradient(ellipse at top left, #1e2230 0%, transparent 55%),
+    radial-gradient(ellipse at bottom right, #1a1d24 0%, transparent 60%);
+  color: var(--text-primary);
+  font-family: var(--font-body);
+  direction: rtl;
+}
+
+button {
+  font-family: inherit;
+}
+
+::selection {
+  background: var(--paper-gold-dim);
+  color: var(--ink-black);
+}
+
+.app-shell {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 32px 24px 80px;
+}
+
+.masthead {
+  text-align: center;
+  border-bottom: 1px solid var(--border-hairline);
+  padding-bottom: 20px;
+  margin-bottom: 28px;
+}
+
+.masthead .kicker {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  letter-spacing: 0.15em;
+  color: var(--paper-gold-dim);
+  text-transform: uppercase;
+}
+
+.masthead h1 {
+  font-family: var(--font-display);
+  font-size: 34px;
+  margin: 6px 0 4px;
+  color: var(--paper-gold);
+}
+
+.masthead .subtitle {
+  color: var(--text-muted);
+  font-size: 14px;
+}
+
+/* لوحة الحالة العليا: مؤشرات سياسية/اقتصادية/عسكرية */
+.dashboard {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  gap: 12px;
+  margin-bottom: 28px;
+}
+
+.stat-card {
+  background: var(--ink-panel);
+  border: 1px solid var(--border-hairline);
+  border-radius: 2px;
+  padding: 12px 14px;
+}
+
+.stat-card .stat-label {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  color: var(--text-muted);
+  margin-bottom: 8px;
+}
+
+.stat-card .stat-value {
+  font-family: var(--font-mono);
+  font-size: 20px;
+  color: var(--text-primary);
+}
+
+.stat-bar-track {
+  height: 4px;
+  background: #2a2d36;
+  border-radius: 2px;
+  margin-top: 8px;
+  overflow: hidden;
+}
+
+.stat-bar-fill {
+  height: 100%;
+  background: var(--paper-gold);
+  transition: width 0.4s ease;
+}
+
+/* بطاقة الحدث التاريخي — العنصر المميز (signature element) */
+.event-card {
+  position: relative;
+  background: var(--ink-panel);
+  border: 1px solid var(--border-hairline);
+  padding: 28px 30px;
+  border-radius: 2px;
+}
+
+.event-card::before {
+  /* حافة ورقية ممزقة بسيطة أعلى البطاقة */
+  content: '';
+  position: absolute;
+  top: -1px;
+  right: 0;
+  left: 0;
+  height: 6px;
+  background: repeating-linear-gradient(
+    -65deg,
+    var(--ink-black) 0 6px,
+    transparent 6px 12px
+  );
+}
+
+.event-seal {
+  position: absolute;
+  top: 18px;
+  left: 18px;
+  width: 74px;
+  height: 74px;
+  border: 2px solid var(--paper-gold-dim);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  color: var(--paper-gold-dim);
+  letter-spacing: 0.05em;
+  transform: rotate(-8deg);
+  padding: 6px;
+  line-height: 1.3;
+}
+
+.event-seal.confidence-player_branch {
+  border-color: var(--seal-red);
+  color: var(--seal-red);
+}
+
+.event-meta {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  color: var(--paper-gold-dim);
+  margin-bottom: 4px;
+}
+
+.event-card h2 {
+  font-family: var(--font-display);
+  font-size: 24px;
+  margin: 0 0 14px;
+  padding-left: 90px;
+}
+
+.event-context {
+  color: var(--text-primary);
+  line-height: 1.9;
+  font-size: 15px;
+  margin-bottom: 18px;
+}
+
+.image-placeholder {
+  border: 1px dashed var(--border-hairline);
+  padding: 14px 16px;
+  font-size: 12px;
+  color: var(--text-muted);
+  margin-bottom: 18px;
+  display: flex;
+  gap: 10px;
+  align-items: flex-start;
+}
+
+.player-role-box {
+  background: #23262f;
+  border-right: 3px solid var(--paper-gold);
+  padding: 12px 16px;
+  font-size: 14px;
+  margin-bottom: 22px;
+}
+
+.decisions-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.decision-btn {
+  text-align: right;
+  background: transparent;
+  border: 1px solid var(--border-hairline);
+  color: var(--text-primary);
+  padding: 14px 16px;
+  border-radius: 2px;
+  cursor: pointer;
+  font-size: 14px;
+  transition: border-color 0.2s, background 0.2s;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 10px;
+}
+
+.decision-btn:hover {
+  border-color: var(--paper-gold-dim);
+  background: #23262f;
+}
+
+.decision-outcome-tag {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  white-space: nowrap;
+  padding: 2px 8px;
+  border-radius: 10px;
+  border: 1px solid var(--border-hairline);
+  color: var(--text-muted);
+}
+
+.decision-outcome-tag.branch {
+  color: var(--seal-red);
+  border-color: var(--seal-red);
+}
+
+.consequence-panel {
+  margin-top: 22px;
+  padding-top: 16px;
+  border-top: 1px dashed var(--border-hairline);
+  font-size: 13px;
+  color: var(--text-muted);
+}
+
+.sources-line {
+  margin-top: 10px;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--paper-gold-dim);
+}
+
+.characters-strip {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 18px;
+  flex-wrap: wrap;
+}
+
+.character-chip {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: var(--ink-panel);
+  border: 1px solid var(--border-hairline);
+  border-radius: 20px;
+  padding: 6px 14px;
+  font-size: 12px;
+}
+
+.character-chip .portrait-fallback {
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: var(--field-green);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 10px;
+  color: var(--text-primary);
+}
+
+.ending-screen {
+  text-align: center;
+  padding: 60px 20px;
+}
+
+.ending-screen h2 {
+  font-family: var(--font-display);
+  font-size: 30px;
+  color: var(--paper-gold);
+}
+
+.objectives-list {
+  list-style: none;
+  padding: 0;
+  max-width: 480px;
+  margin: 24px auto;
+  text-align: right;
+}
+
+.objectives-list li {
+  display: flex;
+  justify-content: space-between;
+  padding: 10px 0;
+  border-bottom: 1px solid var(--border-hairline);
+  font-size: 14px;
+}
+
+.badge-met {
+  color: #7fae6e;
+  font-family: var(--font-mono);
+  font-size: 12px;
+}
+
+.badge-unmet {
+  color: var(--seal-red);
+  font-family: var(--font-mono);
+  font-size: 12px;
+}
